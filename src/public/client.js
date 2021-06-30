@@ -21,11 +21,27 @@
      * @type {Chat[]}
      * */
     const chats =[]
+    const adjectives = ['a','b','c','d','e'];
+    const tail = ['hi','hello','bye'];
+
+    /**
+     * @param {string[]} array
+     * @returns {string}
+     *  */
+    function pickRn(array)
+    {
+        const rdMix = Math.floor(Math.random()*array.length);
+        const result = array[rdMix];
+        if(!result) throw new Error('array lenght is 0.');
+        return result;
+    }
+
+    const rdnick = `${pickRn(adjectives)}${pickRn(tail)}`;
     formEl.addEventListener('submit',(event) => {
         event.preventDefault()
         socket.send(JSON.stringify(
             {
-                nickname : 'parkwongyun',
+                nickname : rdnick,
                 message : inputEl.value
             }
         ))
