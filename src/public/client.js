@@ -48,15 +48,29 @@
         inputEl.value = ''
     })
 
-    socket.addEventListener('message',(event) => {
+    const  drawChats = () =>
+    {
         chatlistEl.innerHTML=''
-
-        chats.push(JSON.parse(event.data));
-        chats.forEach( ({message,nickname}) => {
+        chats.forEach(({message,nickname}) => {
             const div = document.createElement('div')
-            div.innerText=`${nickname} : ${message}`;
-            chatlistEl.appendChild(div);
+            div.innerText = `${nickname} : ${message}`
+            chatlistEl.appendChild(div)
         })
+
+    }
+    socket.addEventListener('message',(event) => {
+        const { type,payload } = JSON.parse(event.data)
+
+        if(type ==='sync')
+        {
+            const {chats: syncedChats} = payload
+            chats.push(...syncedChats)
+        }else if ( type === 'chat'){
+            const _chat = payload
+            chats.push(_chat)
+        }
+
+        drawChats()
 
     })
 })()
